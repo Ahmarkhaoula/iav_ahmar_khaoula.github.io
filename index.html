@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IAV</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&amp;display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&amp;display=swap" media="print" onload="this.media='all'"/>
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&amp;display=swap"/>
+    </noscript>
+    <link href="css/bootstrap.min.css?ver=1.2.0" rel="stylesheet">
+    <link href="css/main.css?ver=1.2.0" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="leaflet.css"/>
+    <script src="leaflet.js" ></script>
+    <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+
+    <link rel="stylesheet" href="libs/leaflet-measure-path.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+<script src="libs/editable.js" ></script>
+<script src="libs/measure.js"></script>
+<script src="leaflet.MeasurePolygon.js"></script>
+
+
+
+	<link rel="stylesheet" type="text/css" href="src/L.Control.ZoomBar.css"/>
+	<link rel="stylesheet" href="leaflet.draw.css" />
+	
+	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+	<script type="text/javascript" src="src/L.Control.ZoomBar.js"></script>
+	<script src="GEOJSON.js" ></script>
+	<script src="GeoJSON1.js" ></script>
+	
+	
+	
+
+
+	<style type="text/css">
+		#map { width: 700px; max-width: 100%; height: 433px; }
+	</style>
+
+    <noscript>
+      <style>
+        .tf-header {
+          background: url('images/iavlogo.jpg') no-repeat center center;
+        }
+
+
+     html, body {
+			height: 100%;
+			margin: 10;
+		}
+		.leaflet-container {
+			height: 500px;
+			width: 1000px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+
+    .getZoomButton {
+                position: absolute;
+                top: 18px;
+                left: 20px;
+                z-index: 1001;
+            }
+
+      </style>
+    </noscript>
+  </head>
+  <body id="top"> 
+    <header class="tf-header" data-parallax="scroll" data-image-src="images/iavlogo.jpg">
+      <nav class="navbar py-5 navbar-dark">
+        <div class="container">
+          <h1><a class="navbar-brand" href="https://iav.ac.ma/">iav</a></h1>
+          <div id="navbar">
+            <ul class="nav pull-right">
+              <li class="nav-item"><a class="nav-link" href="#">a propos</a></li>
+              <li class="nav-item"><a class="nav-link" href="#work">Carte</a></li>
+              
+            </ul>
+          </div>
+        </div>
+        
+      </nav>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-7 col-sm-12">
+            <h2>Geoportail IAV Rabat</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-7 col-sm-12">
+            <p class="mt-4">Crée en 1966 par Décret Royal et doté de la personnalité morale et de l’autonomie financière, l’Institut a démarré avec 12 étudiants et des cours assurés par des enseignants étrangers.</p>
+            <p class="mt-5">Dès octobre 1969 les Autorités Gouvernementales ont manifesté le désir de voir la formation vétérinaire s’effectuer au Maroc et ont confié cette mission à l’Institut qui a pris l’appellation "Institut Agronomique et Vétérinaire Hassan II".</p>
+            <p class="mt-6">L'Institut Agronomique et Vétérinaire Hassan II est passé, en 1966, de 12 étudiants suivant des cours assurés par des enseignants étrangers à son statut actuel de 2019 étudiants et 30 programmes de spécialisation dans deux campus, à savoir Rabat et Agadir. </p>
+            
+          </div>
+        </div>
+        
+    </header>
+    <div class="page-content">
+      <div>
+<div class="tf-work-section">
+  <div class="container" id="work">
+    <h2 class="h3">carte IAV</h2>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div id="map" style="width: 1200px; height: 600px;"></div>
+		
+	</div>
+<script>
+
+	const map = L.map('map').setView([33.976499, -6.866717], 15);
+
+	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+
+  
+  
+    //map.addControl(L.measureControl());
+    let measurePolygonControl = L.control.measurePolygon();
+    measurePolygonControl.addTo(map);
+
+    var zoom_bar = new L.Control.ZoomBar({position: 'topright'}).addTo(map);
+			var tiles1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				maxZoom: 19,
+			}).addTo(map);
+	
+			function getCenterAndZoom(){
+					console.log("Lat: "+map.getCenter().lat);
+					console.log("Lon: "+map.getCenter().lng);
+					console.log("Zoom: "+map.getZoom());
+					alert("Lat: "+map.getCenter().lat+"\nLon: "+map.getCenter().lng+"\nZoom: "+map.getZoom());
+				}
+	const marker = L.marker([33.9805, -6.8626],).addTo(map)
+		.bindPopup('<b>Internat IAV HASSAN II</b>').openPopup();
+	const marker1 = L.marker([33.9805,-6.8642],).addTo(map)
+		.bindPopup('<b>Administartion</b>').openPopup();
+		const marker2 = L.marker([33.9801269,-6.8628],).addTo(map)
+		.bindPopup('<b>CDA</b>').openPopup();
+	const marker3 = L.marker([33.9794898,-6.8638],).addTo(map)
+		.bindPopup('<b>Departement AGRO</b>').openPopup();
+	const marker4 = L.marker([33.9779,-6.8665],).addTo(map)
+		.bindPopup('<b>Departement Genie Rural</b>').openPopup();
+	const marker5 = L.marker([33.9769,-6.8660],).addTo(map)
+		.bindPopup('<b>Building center</b>').openPopup();
+	const marker6 = L.marker([33.9767,-6.8670],).addTo(map)
+		.bindPopup('<b>Departement TOPO</b>').openPopup();
+	const marker7 = L.marker([33.975481,-6.8677071],).addTo(map)
+		.bindPopup('<b>Departement VETO</b>').openPopup();
+	const marker8 = L.marker([33.97421884,-6.8688],).addTo(map)
+		.bindPopup('<b>Clinique Equine</b>').openPopup();
+	const marker9 = L.marker([33.9749084,-6.8669193],).addTo(map)
+		.bindPopup('<b>Amphi AGRO</b>').openPopup();
+	const marker11 = L.marker([33.97455557,-6.8662],).addTo(map)
+		.bindPopup('<b>Departement IAA</b>').openPopup();
+	const marker22 = L.marker([33.972576,-6.8689493],).addTo(map)
+		.bindPopup('<b> Apesa</b>').openPopup();
+
+	
+	const circle = L.circle([33.976499, -6.866717], {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.5,
+		radius: 100
+	}).addTo(map).bindPopup('IAV Hassan II.');
+
+
+
+	const popup = L.popup()
+		.setLatLng([33.9762, -6.8672])
+		.setContent('iav.')
+		.openOn(map);
+
+	function onMapClick(e) {
+		popup
+			.setLatLng(e.latlng)
+			.setContent(`coordonnées ${e.latlng.toString()}`)
+			.openOn(map);
+	}
+
+	map.on('click', onMapClick);
+
+</script>
+<script src="iav3D.js"></script>
+<script>
+	var iav3D = L.geoJSON(iav3D).addTo(map);
+
+
+	iav3D.eachLayer(function (layer) {
+	layer.bindPopup(layer.feature.properties.name);
+});
+</script>
+
+        </div>
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+<div class="tf-quotes-section">
+  <div class="carousel slide mt-5" id="tf-carousel" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li class="active" data-target="#tf-carousel" data-slide-to="0"></li>
+      <li data-target="#tf-carousel" data-slide-to="1"></li>
+      <li data-target="#tf-carousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item active" style="background-image: url('images/iav.jpg');">
+        <div class="carousel-caption">
+          <p class="slider-text-1">IAV</p>
+          <p class="slider-text-2">Institut hassan II agronomique et veterinaire</p>
+        </div>
+      </div>
+      <div class="carousel-item" style="background-image: url('images/apesa.jpg');">
+        <div class="carousel-caption">
+          <p class="slider-text-1">Apesa</p>
+          <p class="slider-text-2">1 er année cycle préparatoire</p>
+        </div>
+      </div>
+      <div class="carousel-item" style="background-image: url('images/equine.jpg');">
+        <div class="carousel-caption">
+          <p class="slider-text-1">Clinique equine</p>
+          <p class="slider-text-2">Clinique veterinaire</p>
+        </div>
+      </div>
+    </div><a class="carousel-control-prev" href="#tf-carousel" role="button" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#tf-carousel" role="button" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a>
+  </div>
+</div>
+
+    <footer class="bg-dark py-4 mt-5 tf-footer">
+      <div class="container text-light">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">&copy; Your Company Name. All rights reserved.</div>
+          <div class="col-md-6 col-sm-12 text-right tf-design">khaoula ahmar - <a href="https://iav.ac.ma/" target="_blank">iav</a></div>
+        </div>
+      </div>
+    </footer>
+    <script src="scripts/jquery.slim.min.js?ver=1.2.0"></script>
+    <script src="scripts/bootstrap.bundle.min.js?ver=1.2.0"></script>
+    <script src="scripts/parallax.min.js?ver=1.2.0"></script>
+    <script src="scripts/main.js?ver=1.2.0"></script>
+  </body>
+</html>
